@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: phishing
+      POSTGRES_USER: phishing
+      POSTGRES_PASSWORD: phishing
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://phishing:phishing@db:5432/phishing
+      STREAMLIT_BROWSER_GATHER_USAGE_STATS: "false"
+    ports:
+      - "8501:8501"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
